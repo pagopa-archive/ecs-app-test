@@ -28,6 +28,9 @@ stages:
         tags: |
           $(tag)
           latest
+    - task: CmdLine@2
+      inputs:
+        script: 'docker image ls'
     - task: ECRPushImage@1
       inputs:
         awsCredentials: 'AWS-UAT-SERVICE-CONN'
