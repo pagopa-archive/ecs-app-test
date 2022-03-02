@@ -25,6 +25,7 @@ stages:
       inputs:
         command: build
         dockerfile: '$(Build.SourcesDirectory)/src/Dockerfile'
+        repository: 'ur-u-ecr$(Build.BuildId)'
         tags: |
           $(tag)
           latest
