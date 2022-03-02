@@ -38,7 +38,13 @@ stages:
         regionName: 'eu-south-1'
         imageSource: 'imagename'
         sourceImageName: 'gowebapp'
-        pushTag: |
-          $(tag)
-          latest
+        pushTag: latest
+        repositoryName: 'ur-u-ecr'
+    - task: ECRPushImage@1
+      inputs:
+        awsCredentials: 'AWS-UAT-SERVICE-CONN'
+        regionName: 'eu-south-1'
+        imageSource: 'imagename'
+        sourceImageName: 'gowebapp'
+        pushTag: $(tag)
         repositoryName: 'ur-u-ecr'
