@@ -27,6 +27,7 @@ stages:
         dockerfile: '$(Build.SourcesDirectory)/src/Dockerfile'
         tags: |
           $(tag)
+          latest
     - task: ECRPushImage@1
       inputs:
         awsCredentials: 'AWS-UAT-SERVICE-CONN'
