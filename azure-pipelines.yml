@@ -32,5 +32,5 @@ stages:
         awsCredentials: 'AWS-UAT-SERVICE-CONN'
         regionName: 'eu-south-1'
         imageSource: 'imagename'
-        sourceImageName: 'ur-u-ecr${Build.Buildid}'
+        sourceImageName: 'ur-u-ecr$(Build.Buildid)'
         repositoryName: 'ur-u-ecr'
