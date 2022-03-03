@@ -36,7 +36,7 @@ stages:
         tags: |
           $(tag)
           latest
-    - ${{ each tag in parameter.tags }}:
+    - ${{ each tag in parameters.tags }}:
       - task: ECRPushImage@1
         displayName: Push Latest tag
         inputs:
