@@ -45,7 +45,7 @@ stages:
       - task: ECRPushImage@1
         displayName: Push tag  ${{ parameters.dockerimage }} :${{ tag }}
         inputs:
-          awsCredentials: 'AWS-UAT-SERVICE-CONN'
+          awsCredentials: 'AWS Uat'
           regionName: 'eu-south-1'
           imageSource: 'imagename'
           sourceImageName: ${{ parameters.dockerimage }}
@@ -53,7 +53,7 @@ stages:
           repositoryName: 'ur-u-ecr'
     - task: AWSCLI@1
       inputs:
-        awsCredentials: 'AWS-UAT-SERVICE-CONN'
+        awsCredentials: 'AWS Uat'
         regionName: 'eu-south-1'
         awsCommand: 'ecs'
         awsSubCommand: 'update-service'
