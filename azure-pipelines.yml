@@ -11,6 +11,9 @@ resources:
 variables:
   tag: '$(Build.BuildId)'
 
+parameters:
+  tags: [ "latest", $(tag) ]
+
 stages:
 - stage: Build
   displayName: Build image
@@ -29,7 +32,7 @@ stages:
         tags: |
           $(tag)
           latest
-    - ${{ each tag in [ "latest", $(tag)]}}:
+    - ${{ each tag in parameter.tags }}:
       - task: ECRPushImage@1
         displayName: Push Latest tag
         inputs:
