@@ -51,3 +51,10 @@ stages:
           sourceImageName: ${{ parameters.dockerimage }}
           pushTag: ${{ tag }}
           repositoryName: 'ur-u-ecr'
+    - task: AWSCLI@1
+      inputs:
+        awsCredentials: 'AWS-UAT-SERVICE-CONN'
+        regionName: 'eu-south-1'
+        awsCommand: 'ecs'
+        awsSubCommand: 'update-service'
+        awsArguments: '--cluster ur-u-ecs-cluster --service ur-u-ecs-service --force-new-deployment'
