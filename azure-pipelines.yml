@@ -48,6 +48,6 @@ stages:
           awsCredentials: 'AWS-UAT-SERVICE-CONN'
           regionName: 'eu-south-1'
           imageSource: 'imagename'
-          sourceImageName: ${{ parameter.dockerimage }}
+          sourceImageName: ${{ parameters.dockerimage }}
           pushTag: ${{ tag }}
           repositoryName: 'ur-u-ecr'
