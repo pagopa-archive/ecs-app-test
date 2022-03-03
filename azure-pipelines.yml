@@ -12,7 +12,11 @@ variables:
   tag: '$(Build.BuildId)'
 
 parameters:
-  tags: []
+- name: tags
+  type: object
+  default:
+  - latest
+  - $(tag)
 
 stages:
 - stage: Build
