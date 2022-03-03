@@ -12,6 +12,11 @@ variables:
   tag: '$(Build.BuildId)'
 
 parameters:
+- name: dockerimage
+  displayName: 'The name of the docker image'
+  type: string
+  default: 'gowebapp'
+
 - name: tags
   type: object
   default:
@@ -32,17 +37,17 @@ stages:
       inputs:
         command: build
         dockerfile: '$(Build.SourcesDirectory)/src/Dockerfile'
-        repository: 'gowebapp'
+        repository: ${{ parameters.dockerimage }}
         tags: |
           $(tag)
           latest
     - ${{ each tag in parameters.tags }}:
       - task: ECRPushImage@1
-        displayName: Push Latest ${{ tag }}
+        displayName: Push tag  ${{ parameters.dockerimage }} :${{ tag }}
         inputs:
           awsCredentials: 'AWS-UAT-SERVICE-CONN'
           regionName: 'eu-south-1'
           imageSource: 'imagename'
-          sourceImageName: 'gowebapp'
+          sourceImageName: ${{ parameter.dockerimage }}
           pushTag: ${{ tag }}
           repositoryName: 'ur-u-ecr'
