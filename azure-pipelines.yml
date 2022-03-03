@@ -12,7 +12,7 @@ variables:
   tag: '$(Build.BuildId)'
 
 parameters:
-  tags: [ 'latest', $(tag) ]
+  tags: ${{ join(', ', [ 'latest', $(tag) ] }}  
 
 stages:
 - stage: Build
