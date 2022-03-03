@@ -11,6 +11,18 @@ resources:
 variables:
   tag: '$(Build.BuildId)'
 
+parameters:
+- name: dockerimage
+  displayName: 'The name of the docker image'
+  type: string
+  default: 'gowebapp'
+
+- name: tags
+  type: object
+  default:
+  - latest
+  - $(tag)
+
 stages:
 - stage: Build
   displayName: Build image
@@ -25,12 +37,24 @@ stages:
       inputs:
         command: build
         dockerfile: '$(Build.SourcesDirectory)/src/Dockerfile'
+        repository: ${{ parameters.dockerimage }}
         tags: |
           $(tag)
-    - task: ECRPushImage@1
+          latest
+    - ${{ each tag in parameters.tags }}:
+      - task: ECRPushImage@1
+        displayName: Push tag  ${{ parameters.dockerimage }} :${{ tag }}
+        inputs:
+          awsCredentials: 'AWS-UAT-SERVICE-CONN'
+          regionName: 'eu-south-1'
+          imageSource: 'imagename'
+          sourceImageName: ${{ parameters.dockerimage }}
+          pushTag: ${{ tag }}
+          repositoryName: 'ur-u-ecr'
+    - task: AWSCLI@1
       inputs:
         awsCredentials: 'AWS-UAT-SERVICE-CONN'
         regionName: 'eu-south-1'
-        imageSource: 'imagename'
-        sourceImageName: 'ur-u-ecr$(Build.Buildid)'
-        repositoryName: 'ur-u-ecr'
+        awsCommand: 'ecs'
+        awsSubCommand: 'update-service'
+        awsArguments: '--cluster ur-u-ecs-cluster --service ur-u-ecs-service --force-new-deployment'
