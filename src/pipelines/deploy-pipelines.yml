@@ -36,7 +36,7 @@ stages:
       displayName: Build an image
       inputs:
         command: build
-        dockerfile: '$(Build.SourcesDirectory)/src/Dockerfile'
+        dockerfile: '$(Build.SourcesDirectory)/src/webapp/Dockerfile'
         repository: ${{ parameters.dockerimage }}
         tags: |
           $(tag)
