@@ -38,7 +38,7 @@ stages:
           latest
     - ${{ each tag in parameters.tags }}:
       - task: ECRPushImage@1
-        displayName: Push Latest tag
+        displayName: Push Latest ${{ tag }}
         inputs:
           awsCredentials: 'AWS-UAT-SERVICE-CONN'
           regionName: 'eu-south-1'
