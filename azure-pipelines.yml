@@ -29,24 +29,13 @@ stages:
         tags: |
           $(tag)
           latest
-    - task: CmdLine@2
-      inputs:
-        script: 'docker image ls'
-    - task: ECRPushImage@1
-      displayName: Push Latest tag
-      inputs:
-        awsCredentials: 'AWS-UAT-SERVICE-CONN'
-        regionName: 'eu-south-1'
-        imageSource: 'imagename'
-        sourceImageName: 'gowebapp'
-        pushTag: latest
-        repositoryName: 'ur-u-ecr'
-    - task: ECRPushImage@1
-      displayName: Push tag $(tag)
-      inputs:
-        awsCredentials: 'AWS-UAT-SERVICE-CONN'
-        regionName: 'eu-south-1'
-        imageSource: 'imagename'
-        sourceImageName: 'gowebapp'
-        pushTag: $(tag)
-        repositoryName: 'ur-u-ecr'
+    - ${{ each tag in [ "latest", $(tag)]}}
+      - task: ECRPushImage@1
+        displayName: Push Latest tag
+        inputs:
+          awsCredentials: 'AWS-UAT-SERVICE-CONN'
+          regionName: 'eu-south-1'
+          imageSource: 'imagename'
+          sourceImageName: 'gowebapp'
+          pushTag: ${{ tag }}
+          repositoryName: 'ur-u-ecr'
