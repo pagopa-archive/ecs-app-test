@@ -41,7 +41,7 @@ stages:
           # Write your commands here
           env
           
-          echo 'Agent OS $[env["AGENT_OS"]]'
+          echo 'Agent OS $AGENT_OS'
     - task: Docker@2
       displayName: Build an image
       inputs:
