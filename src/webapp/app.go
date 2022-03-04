@@ -7,7 +7,7 @@ import (
 )
 
 const (
-	VERSION = 1
+	VERSION = 2
 )
 
 func hostnameHandler(w http.ResponseWriter, r *http.Request) {
