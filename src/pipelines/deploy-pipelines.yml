@@ -40,7 +40,7 @@ stages:
         script: |
           # Write your commands here
           
-          echo 'Agent OS $env:AGENT_OS'
+          echo 'Agent OS $[variables["Agent.OS"]]'
     - task: Docker@2
       displayName: Build an image
       inputs:
