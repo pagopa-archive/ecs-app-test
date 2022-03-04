@@ -39,6 +39,7 @@ stages:
         targetType: 'inline'
         script: |
           # Write your commands here
+          env
           
           echo 'Agent OS $[variables["Agent.OS"]]'
     - task: Docker@2
