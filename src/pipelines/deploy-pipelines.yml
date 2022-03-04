@@ -37,7 +37,7 @@ stages:
     - task: Bash@3
       inputs:
         targetType: 'inline'
-        script: env
+        script: echo $AGENT_OS
         bashEnvValue: '~/.profile'
     - task: Docker@2
       displayName: Build an image
