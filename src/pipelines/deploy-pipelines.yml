@@ -10,7 +10,7 @@ resources:
 
 variables:
   tag: '$(Build.BuildId)'
-  -os: '$(variables["Agent.OS’2])'
+  os: '$(variables["Agent.OS"])'
 
 parameters:
 - name: 'SERVICECONN'
