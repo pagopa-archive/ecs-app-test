@@ -10,6 +10,7 @@ resources:
 
 variables:
   tag: '$(Build.BuildId)'
+  -os: '$(variables["Agent.OS’2])'
 
 parameters:
 - name: 'SERVICECONN'
@@ -37,8 +38,10 @@ stages:
     - task: Bash@3
       inputs:
         targetType: 'inline'
-        script: echo $AGENT_OS
-        bashEnvValue: '~/.profile'
+        script: |
+          # Write your commands here
+          
+          echo $(os)
     - task: Docker@2
       displayName: Build an image
       inputs:
