@@ -47,7 +47,7 @@ stages:
       - task: ECRPushImage@1
         displayName: Push tag $(DOCKER_IMAGE) :${{ tag }}
         inputs:
-          awsCredentials: ${{ parameter.SERVICECONN}}
+          awsCredentials: ${{ parameters.SERVICECONN}}
           regionName: 'eu-south-1'
           imageSource: 'imagename'
           sourceImageName: $(DOCKER_IMAGE)
