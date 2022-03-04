@@ -12,11 +12,13 @@ variables:
   tag: '$(Build.BuildId)'
 
 parameters:
-- name: dockerimage
-  displayName: 'The name of the docker image'
+- name: 'SERVICECONN'
+  displayName: 'Select the service connection related to the env.'
   type: string
-  default: 'gowebapp'
-
+  default: 'AWS Uat'
+  values:
+    - 'AWS Uat'
+    - 'AWS Prod'
 - name: tags
   type: object
   default:
@@ -37,23 +39,23 @@ stages:
       inputs:
         command: build
         dockerfile: '$(Build.SourcesDirectory)/src/webapp/Dockerfile'
-        repository: ${{ parameters.dockerimage }}
+        repository: $(DOCKER_IMAGE)
         tags: |
           $(tag)
           latest
     - ${{ each tag in parameters.tags }}:
       - task: ECRPushImage@1
-        displayName: Push tag  ${{ parameters.dockerimage }} :${{ tag }}
+        displayName: Push tag $(DOCKER_IMAGE) :${{ tag }}
         inputs:
-          awsCredentials: 'AWS Uat'
+          awsCredentials: ${{ parameter.SERVICECONN}}
           regionName: 'eu-south-1'
           imageSource: 'imagename'
-          sourceImageName: ${{ parameters.dockerimage }}
+          sourceImageName: $(DOCKER_IMAGE)
           pushTag: ${{ tag }}
           repositoryName: 'ur-u-ecr'
     - task: AWSCLI@1
       inputs:
-        awsCredentials: 'AWS Uat'
+        awsCredentials: ${{ parameters.SERVICECONN}}
         regionName: 'eu-south-1'
         awsCommand: 'ecs'
         awsSubCommand: 'update-service'

@@ -1,3 +1,10 @@
+locals {
+  delploy_app = {
+    docker_image = "gowebapp"
+  }
+}
+
+
 module "ecs_deploy" {
   source = "git::https://github.com/pagopa/azuredevops-tf-modules.git//azuredevops_build_definition_deploy?ref=v2.0.5"
 
@@ -7,8 +14,7 @@ module "ecs_deploy" {
 
   ci_trigger_use_yaml = true
 
-
-  variables        = {}
+  variables        = local.delploy_app
   variables_secret = {}
 
   service_connection_ids_authorization = [
