@@ -8,7 +8,7 @@ import (
 )
 
 const (
-	VERSION int    = 3
+	VERSION int    = 4
 	port    string = "8000"
 )
 
