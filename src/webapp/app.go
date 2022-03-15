@@ -5,28 +5,42 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+
+	"github.com/aws/aws-sdk-go/aws"
+	"github.com/aws/aws-sdk-go/aws/session"
+	"github.com/guregu/dynamo"
 )
 
 const (
-	VERSION int    = 4
-	port    string = "8000"
+	VERSION      int    = 4
+	port         string = "8000"
+	DYNAMO_TABLE string = "ur-u-table"
+	AWS_REGION   string = "eu-south-1"
 )
 
 type Citizen struct {
-	Id         string
+	id         string
 	CF         string
 	FirstName  string
 	LastName   string
 	ApiVersion int
 }
 
-var Citizens = []Citizen{
-	{Id: "001", FirstName: "Jhon", LastName: "Smith", CF: "MRTMTT91D08F205J", ApiVersion: VERSION},
-	{Id: "002", FirstName: "Robert", LastName: "De Niro", CF: "MLLSNT82P65Z404U", ApiVersion: VERSION},
-}
-
 func getAllCitizens(w http.ResponseWriter, r *http.Request) {
-	json.NewEncoder(w).Encode(Citizens)
+
+	sess := session.Must(session.NewSession())
+	db := dynamo.New(sess, &aws.Config{Region: aws.String(AWS_REGION)})
+	table := db.Table(DYNAMO_TABLE)
+
+	// get all items
+	var results []Citizen
+	err := table.Scan().All(&results)
+
+	if err != nil {
+		fmt.Println("Error gettings items ", err)
+	}
+
+	json.NewEncoder(w).Encode(results)
 }
 
 func handleRequests() {
@@ -36,6 +50,7 @@ func handleRequests() {
 }
 
 func main() {
+
 	fmt.Println(fmt.Sprintf("Rest API v%d - Mux Routers listening on port %s", VERSION, port))
 
 	handleRequests()
