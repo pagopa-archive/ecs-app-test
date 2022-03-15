@@ -12,8 +12,10 @@ import (
 )
 
 const (
-	VERSION int    = 4
-	port    string = "8000"
+	VERSION      int    = 4
+	port         string = "8000"
+	DYNAMO_TABLE string = "ur-u-table"
+	AWS_REGION   string = "eu-south-1"
 )
 
 type Citizen struct {
@@ -27,8 +29,8 @@ type Citizen struct {
 func getAllCitizens(w http.ResponseWriter, r *http.Request) {
 
 	sess := session.Must(session.NewSession())
-	db := dynamo.New(sess, &aws.Config{Region: aws.String("us-west-2")})
-	table := db.Table("ur-u-table")
+	db := dynamo.New(sess, &aws.Config{Region: aws.String(AWS_REGION)})
+	table := db.Table(DYNAMO_TABLE)
 
 	// get all items
 	var results []Citizen
