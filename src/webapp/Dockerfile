@@ -4,6 +4,6 @@ RUN apk add --no-cache gcc libc-dev
 ADD app.go /go/src/hello/app.go
 RUN GOOS=linux GOARCH=amd64 go build -tags=netgo app.go
 
-FROM scratch
+FROM alpine
 COPY --from=builder /go/src/hello/app /app
 CMD ["/app"]
