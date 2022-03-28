@@ -14,7 +14,7 @@ import (
 const (
 	VERSION      int    = 4
 	port         string = "8000"
-	DYNAMO_TABLE string = "ur-u-table"
+	DYNAMO_TABLE string = "pdv-u-table"
 	AWS_REGION   string = "eu-south-1"
 )
 
