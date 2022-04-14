@@ -5,17 +5,11 @@ import (
 	"fmt"
 	"log"
 	"net/http"
-
-	"github.com/aws/aws-sdk-go/aws"
-	"github.com/aws/aws-sdk-go/aws/session"
-	"github.com/guregu/dynamo"
 )
 
 const (
-	VERSION      int    = 4
-	port         string = "8000"
-	DYNAMO_TABLE string = "pdv-u-table"
-	AWS_REGION   string = "eu-south-1"
+	VERSION int    = 4
+	port    string = "8060"
 )
 
 type Citizen struct {
@@ -28,16 +22,22 @@ type Citizen struct {
 
 func getAllCitizens(w http.ResponseWriter, r *http.Request) {
 
-	sess := session.Must(session.NewSession())
-	db := dynamo.New(sess, &aws.Config{Region: aws.String(AWS_REGION)})
-	table := db.Table(DYNAMO_TABLE)
-
 	// get all items
 	var results []Citizen
-	err := table.Scan().All(&results)
 
-	if err != nil {
-		fmt.Println("Error gettings items ", err)
+	results = []Citizen{
+		{
+			id:         "001",
+			CF:         "AAAAAA",
+			FirstName:  "Tony",
+			LastName:   "Manero",
+			ApiVersion: VERSION,
+		},
+	}
+
+	// Print all http headers:
+	for key, val := range r.Header {
+		fmt.Println(fmt.Sprintf("Header %s  Value %s", key, val))
 	}
 
 	json.NewEncoder(w).Encode(results)
