@@ -43,10 +43,31 @@ func getAllCitizens(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(results)
 }
 
+func createCitizen(w http.ResponseWriter, r *http.Request) {
+	// Declare a new Person struct.
+	var p Citizen
+
+	// Try to decode the request body into the struct. If there is an error,
+	// respond to the client with the error message and a 400 status code.
+	err := json.NewDecoder(r.Body).Decode(&p)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
+	}
+
+	// Do something with the Person struct...
+	fmt.Fprintf(w, "Person: %+v", p)
+	fmt.Println("Person: ", p)
+}
+
 func handleRequests() {
 
-	http.HandleFunc("/", getAllCitizens)
-	log.Fatal(http.ListenAndServe(fmt.Sprintf(":%s", port), nil))
+	mux := http.NewServeMux()
+	mux.HandleFunc("/person/create", createCitizen)
+	mux.HandleFunc("/person/read", getAllCitizens)
+
+	err := http.ListenAndServe(":"+port, mux)
+	log.Fatal(err)
 }
 
 func main() {
