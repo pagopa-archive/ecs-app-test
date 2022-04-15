@@ -20,6 +20,13 @@ type Citizen struct {
 	ApiVersion int
 }
 
+func printHttpHeades(r *http.Request) {
+	// Print all http headers:
+	for key, val := range r.Header {
+		fmt.Println(fmt.Sprintf("Header %s  Value %s", key, val))
+	}
+}
+
 func getAllCitizens(w http.ResponseWriter, r *http.Request) {
 
 	// get all items
@@ -35,10 +42,7 @@ func getAllCitizens(w http.ResponseWriter, r *http.Request) {
 		},
 	}
 
-	// Print all http headers:
-	for key, val := range r.Header {
-		fmt.Println(fmt.Sprintf("Header %s  Value %s", key, val))
-	}
+	printHttpHeades(r)
 
 	json.NewEncoder(w).Encode(results)
 }
@@ -55,9 +59,18 @@ func createCitizen(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	printHttpHeades(r)
+
 	// Do something with the Person struct...
-	fmt.Fprintf(w, "Person: %+v", p)
+	json.NewEncoder(w).Encode(p)
 	fmt.Println("Person: ", p)
+}
+
+func info(w http.ResponseWriter, r *http.Request) {
+
+	i := "OK"
+
+	json.NewEncoder(w).Encode(i)
 }
 
 func handleRequests() {
@@ -65,6 +78,7 @@ func handleRequests() {
 	mux := http.NewServeMux()
 	mux.HandleFunc("/person/create", createCitizen)
 	mux.HandleFunc("/person/read", getAllCitizens)
+	mux.HandleFunc("/", info)
 
 	err := http.ListenAndServe(":"+port, mux)
 	log.Fatal(err)
