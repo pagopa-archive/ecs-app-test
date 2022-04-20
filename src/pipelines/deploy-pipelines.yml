@@ -68,11 +68,11 @@ stages:
           imageSource: 'imagename'
           sourceImageName: $(DOCKER_IMAGE)
           pushTag: ${{ tag }}
-          repositoryName: 'pdv-u-ecr'
+          repositoryName: '$(ecrName)'
     - task: AWSCLI@1
       inputs:
         awsCredentials: ${{ parameters.SERVICECONN}}
         regionName: 'eu-south-1'
         awsCommand: 'ecs'
         awsSubCommand: 'update-service'
-        awsArguments: '--cluster pdv-u-ecs-cluster --service pdv-u-ecs-service --force-new-deployment'
+        awsArguments: '--cluster $(clusterName) --service $(serviceName) --force-new-deployment'
