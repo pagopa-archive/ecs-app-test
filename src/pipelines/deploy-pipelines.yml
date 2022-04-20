@@ -8,9 +8,6 @@ trigger:
 resources:
 - repo: self
 
-variables:
-  tag: '$(Build.BuildId)'
-
 parameters:
 - name: 'SERVICECONN'
   displayName: 'Select the service connection related to the env.'
@@ -24,6 +21,15 @@ parameters:
   default:
   - latest
   - $(tag)
+
+variables:
+  - name: tag 
+    value: '$(Build.BuildId)'
+  - name: ecrName
+    ${{ if eq( parameters['SERVICECONN'], 'AWS Uat') }}:
+      value: pdv-u-ecr
+    ${{ if eq( parameters['SERVICECONN'], 'AWS Prod') }}:
+      value: pdv-p-ecr
 
 stages:
 - stage: Build
