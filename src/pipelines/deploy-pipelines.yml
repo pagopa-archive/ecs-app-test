@@ -30,6 +30,16 @@ variables:
       value: pdv-u-ecr
     ${{ if eq( parameters['SERVICECONN'], 'AWS Prod') }}:
       value: pdv-p-ecr
+  - name: clusterName
+    ${{ if eq( parameters['SERVICECONN'], 'AWS Uat') }}:
+      value: pdv-u-ecs-cluster
+    ${{ if eq( parameters['SERVICECONN'], 'AWS Prod') }}:
+      value: pdv-p-ecs-cluster
+  - name: serviceName
+    ${{ if eq( parameters['SERVICECONN'], 'AWS Uat') }}:
+      value: pdv-u-ecs-service
+    ${{ if eq( parameters['SERVICECONN'], 'AWS Prod') }}:
+      value: pdv-p-ecs-service
 
 stages:
 - stage: Build
