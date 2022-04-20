@@ -8,9 +8,6 @@ trigger:
 resources:
 - repo: self
 
-variables:
-  tag: '$(Build.BuildId)'
-
 parameters:
 - name: 'SERVICECONN'
   displayName: 'Select the service connection related to the env.'
@@ -24,6 +21,25 @@ parameters:
   default:
   - latest
   - $(tag)
+
+variables:
+  - name: tag 
+    value: '$(Build.BuildId)'
+  - name: ecrName
+    ${{ if eq( parameters['SERVICECONN'], 'AWS Uat') }}:
+      value: pdv-u-poc
+    ${{ if eq( parameters['SERVICECONN'], 'AWS Prod') }}:
+      value: pdv-p-poc
+  - name: clusterName
+    ${{ if eq( parameters['SERVICECONN'], 'AWS Uat') }}:
+      value: pdv-u-ecs-cluster
+    ${{ if eq( parameters['SERVICECONN'], 'AWS Prod') }}:
+      value: pdv-p-ecs-cluster
+  - name: serviceName
+    ${{ if eq( parameters['SERVICECONN'], 'AWS Uat') }}:
+      value: pdv-u-service-poc
+    ${{ if eq( parameters['SERVICECONN'], 'AWS Prod') }}:
+      value: pdv-p-service-poc
 
 stages:
 - stage: Build
@@ -52,11 +68,11 @@ stages:
           imageSource: 'imagename'
           sourceImageName: $(DOCKER_IMAGE)
           pushTag: ${{ tag }}
-          repositoryName: 'pdv-u-poc'
+          repositoryName: '$(ecrName)'
     - task: AWSCLI@1
       inputs:
         awsCredentials: ${{ parameters.SERVICECONN}}
         regionName: 'eu-south-1'
         awsCommand: 'ecs'
         awsSubCommand: 'update-service'
-        awsArguments: '--cluster pdv-u-ecs-cluster --service pdv-u-service-poc --force-new-deployment'
+        awsArguments: '--cluster $(clusterName) --service $(serviceName) --force-new-deployment'
