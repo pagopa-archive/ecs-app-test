@@ -27,6 +27,14 @@ func printHttpHeades(r *http.Request) {
 	}
 }
 
+func printQueryString(r *http.Request) {
+
+	values := r.URL.Query()
+	for k, v := range values {
+		fmt.Println(k, " => ", v)
+	}
+}
+
 func getAllCitizens(w http.ResponseWriter, r *http.Request) {
 
 	// get all items
@@ -43,6 +51,7 @@ func getAllCitizens(w http.ResponseWriter, r *http.Request) {
 	}
 
 	printHttpHeades(r)
+	printQueryString(r)
 
 	json.NewEncoder(w).Encode(results)
 }
@@ -60,10 +69,11 @@ func createCitizen(w http.ResponseWriter, r *http.Request) {
 	}
 
 	printHttpHeades(r)
+	printQueryString(r)
 
 	// Do something with the Person struct...
 	json.NewEncoder(w).Encode(p)
-	fmt.Println("Person: ", p)
+	fmt.Println(p)
 }
 
 func info(w http.ResponseWriter, r *http.Request) {
